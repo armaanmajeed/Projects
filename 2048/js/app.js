@@ -171,32 +171,32 @@ function merge_up() {
         k++;
         under = squares[j+k][i];
       }
-    //   if (current === under) {
-    //     temp.push(2 * current);
-    //     squares[j][i] = 0;
-    //     squares[j+k][i] = 0;
-    //   } else if (current !== 0) {
-    //     temp.push(current);
-    //     squares[j][i] = 0;
-    //   }
-    // }
-    // for (let j = 0; j < squares[i].length; j++) {
-    //   if (squares[j][i] !== 0) {
-    //     temp.push(squares[j][i]);
-    //   }
-    // }
-    // let tempLength = temp.length;
-    // let diff = squares[0].length - tempLength;
-    // console.log(`Diff is ${diff}`);
-    // console.log(`Temp is ${temp}`);
-    // while (diff !== 0) {
-    //   temp.push(0);
-    //   diff--;
-    // }
-    // for (let j = 0; j < squares[i].length; j++) {
-    //   if (temp.some((e) => e != 0)) {
-    //     squares[j][i] = temp[j];
-    //   }
+      if (current === under) {
+        temp.push(2 * current);
+        squares[j][i] = 0;
+        squares[j+k][i] = 0;
+      } else if (current !== 0) {
+        temp.push(current);
+        squares[j][i] = 0;
+      }
+    }
+    for (let j = 0; j < squares[i].length; j++) {
+      if (squares[j][i] !== 0) {
+        temp.push(squares[j][i]);
+      }
+    }
+    let tempLength = temp.length;
+    let diff = squares[0].length - tempLength;
+    console.log(`Diff is ${diff}`);
+    console.log(`Temp is ${temp}`);
+    while (diff !== 0) {
+      temp.push(0);
+      diff--;
+    }
+    for (let j = 0; j < squares[i].length; j++) {
+      if (temp.some((e) => e != 0)) {
+        squares[j][i] = temp[j];
+      }
     }
   }
 }
