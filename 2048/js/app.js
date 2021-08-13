@@ -4,6 +4,7 @@ const result_display = document.getElementById("result");
 // create initial board
 const width = 4;
 let squares = [];
+let score = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
   init();
@@ -12,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Initial
 function init() {
+  score = 0;
   squares = Array.from({ length: width }, () =>
     Array.from({ length: width }, () => 0)
   );
@@ -30,6 +32,7 @@ function render_game() {
     }
   });
   grid_display.innerHTML = html;
+  score_display.innerHTML = score;
 }
 
 function generate_random_value() {
@@ -96,7 +99,9 @@ function merge_left() {
         next = squares[i][j + k];
       }
       if (current === next) {
-        temp.push(2 * current);
+        let val = 2 * current;
+        temp.push(val);
+        score += val;
         squares[i][j + k] = 0;
         squares[i][j] = 0;
       } else if (current !== 0) {
@@ -132,7 +137,9 @@ function merge_right() {
         previous = squares[i][j-k];
       }
       if (current === previous) {
-        temp.push(2 * current);
+        let val = 2 * current;
+        temp.push(val);
+        score += val;
         squares[i][j] = 0;
         squares[i][j-k] = 0;
       } else if (current !== 0) {
@@ -160,48 +167,90 @@ function merge_right() {
 function merge_up() {
   for (let i = 0; i < squares.length; i++) {
     let temp = [];
-    let k = 1;
-    for (let j = 0; j < squares[i].length; j++) {
+    for (let j = 0; j < squares[i].length-1; j++) {
+      let k = 1;
       let current = squares[j][i];
-      console.log("");
-      console.log(squares,j,k,i);
-      console.log(squares[j+k][i]);
       let under = squares[j+k][i];
-      while (under !== 0 && j+k < squares[i].length) {
-        k++;
+      while (under === 0 && j+k < squares[0].length) {
         under = squares[j+k][i];
+        k++;
+      }
+      if (j+k === squares[0].length) {
+        k--;
       }
       if (current === under) {
-        temp.push(2 * current);
+        let val = 2 * current;
+        temp.push(val);
+        score += val;
         squares[j][i] = 0;
-        squares[j+k][i] = 0;
+        squares[j+k][i] = 0
       } else if (current !== 0) {
         temp.push(current);
         squares[j][i] = 0;
       }
     }
-    for (let j = 0; j < squares[i].length; j++) {
+    for (let j = 0; j < squares[0].length; j++) {
       if (squares[j][i] !== 0) {
         temp.push(squares[j][i]);
       }
     }
-    let tempLength = temp.length;
-    let diff = squares[0].length - tempLength;
-    console.log(`Diff is ${diff}`);
-    console.log(`Temp is ${temp}`);
+    let diff = squares[0].length - temp.length;
     while (diff !== 0) {
       temp.push(0);
       diff--;
     }
-    for (let j = 0; j < squares[i].length; j++) {
-      if (temp.some((e) => e != 0)) {
+    if (temp.some((e) => e != 0)) {
+      for (let j = 0; j < squares[0].length; j++) {
         squares[j][i] = temp[j];
       }
     }
   }
 }
 
-function merge_down() {}
+function merge_down() {
+  for (let i = 0; i < squares.length; i++) {
+    let temp = [];
+    for (let j = squares[0].length-1; j > 0; j--) {
+      let k = 1;
+      let current = squares[j][i];
+      let above = squares[j-k][i];
+      while (above === 0 && j-k >= 0) {
+        above = squares[j-k][i];
+        k++;
+      }
+      if (j-k < 0) {
+        k--;
+      }
+      if (current === above && current !== 0) {
+        let val = 2 * current;
+        temp.push(val);
+        score += val;
+        squares[j][i] = 0;
+        squares[j-k][i] = 0;
+      } else if (current !== 0) {
+        temp.push(current);
+        squares[j][i] = 0;
+      }
+    }
+    for (let j = squares[0].length-1; j >= 0; j--) {
+      if (squares[j][i] !== 0) {
+        temp.push(squares[j][i]);
+      }
+    }
+    let diff = squares[0].length - temp.length;
+    while (diff !== 0) {
+      temp.push(0);
+      diff--;
+    }
+    temp.reverse();
+    // console.log(temp);
+    if (temp.some((e) => e != 0)) {
+      for (let j = squares[0].length-1; j >= 0; j--) {
+        squares[j][i] = temp[j];
+      }
+    }
+  }
+}
 
 function game_over() {
   alert("Game Over");
