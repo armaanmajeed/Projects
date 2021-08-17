@@ -1,8 +1,11 @@
 const grid_display = document.querySelector(".grid");
 const score_display = document.getElementById("score");
 const result_display = document.getElementById("result");
+const width_change = document.getElementById("width");
+const new_game = document.getElementById("new-game");
+
 // create initial board
-const width = 4;
+let width = 4;
 let squares = [];
 let score = 0;
 
@@ -24,9 +27,10 @@ function init() {
 
 function render_game() {
   let html = "";
-  for (let i = 0; i < squares[0]; i++) {
-    html += `<div class="row"></div>`;
+  for (let i = 0; i < squares.length; i++) {
+    html += `<div class="row">`;
     for (let j = 0; j < squares[0].length; j++) {
+      let box = squares[i][j];
       if (box === 0) {
         html += `<div class="hide">${box}</div>`;
       } else {
@@ -34,15 +38,8 @@ function render_game() {
         html += `<div style="background-color: ${getColor}">${box}</div>`;
       }
     }
+    html += `</div>`
   }
-  squares.flat().forEach((box) => {
-    if (box === 0) {
-      html += `<div class="hide">${box}</div>`;
-    } else {
-      let getColor = color_picker(box);
-      html += `<div style="background-color: ${getColor}">${box}</div>`;
-    }
-  });
   grid_display.innerHTML = html;
   score_display.innerHTML = score;
 }
@@ -76,6 +73,15 @@ function put_random_value_to_random_place() {
 }
 
 function event_listeners() {
+  width_change.addEventListener("change", (e) => {
+    width = e.target.value;
+    init();
+  })
+
+  new_game.addEventListener("click", () => {
+    init();
+  })
+
   document.addEventListener("keyup", (e) => {
     switch (e.key) {
       case "ArrowLeft":

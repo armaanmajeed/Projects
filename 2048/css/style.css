@@ -11,7 +11,7 @@ h1 {
   margin: 0px;
 }
 .container {
-  width: 468px;
+  /* width: 468px; */
   margin-top: 30px;
 }
 .info {
@@ -19,17 +19,20 @@ h1 {
   justify-content: space-between;
   margin-bottom: 20px;
 }
+.row {
+  display: flex;
+}
 .grid {
   display: flex;
-  flex-wrap: wrap;
-  width: 456px;
-  /* height: 456px; */
+  flex-wrap: nowrap;
+  flex-direction: column;
   background-color: #bbada0;
   border: 7px solid #bbada0;
   border-radius: 6px;
-  margin-top: 20px;
+  margin: 50px auto;
+  max-width: fit-content;
 }
-.grid div {
+.row div {
   width: 100px;
   height: 100px;
   margin: 7px;
@@ -55,7 +58,7 @@ h1 {
 .score-title {
   font-size: 16px;
 }
-.grid > .hide {
+.row > .hide {
   color: #cdc1b4;
   background-color: #cdc1b4;
 }
