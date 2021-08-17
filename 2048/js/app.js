@@ -24,11 +24,23 @@ function init() {
 
 function render_game() {
   let html = "";
+  for (let i = 0; i < squares[0]; i++) {
+    html += `<div class="row"></div>`;
+    for (let j = 0; j < squares[0].length; j++) {
+      if (box === 0) {
+        html += `<div class="hide">${box}</div>`;
+      } else {
+        let getColor = color_picker(box);
+        html += `<div style="background-color: ${getColor}">${box}</div>`;
+      }
+    }
+  }
   squares.flat().forEach((box) => {
     if (box === 0) {
       html += `<div class="hide">${box}</div>`;
     } else {
-      html += `<div>${box}</div>`;
+      let getColor = color_picker(box);
+      html += `<div style="background-color: ${getColor}">${box}</div>`;
     }
   });
   grid_display.innerHTML = html;
@@ -250,6 +262,19 @@ function merge_down() {
       }
     }
   }
+}
+
+function color_picker(magnitude) {
+  let old_max = Math.max(...squares.flat());
+  let old_min = 2;
+  let new_min = 0;
+  let new_max = 255;
+  let old_value = magnitude;
+  let new_value = ( (old_value - old_min) / (old_max - old_min) ) * (new_max - new_min) + new_min;
+
+  let color = Math.floor(new_value);
+  
+  return `hsl(${color}, 50%, 50%)`;
 }
 
 function game_over() {
